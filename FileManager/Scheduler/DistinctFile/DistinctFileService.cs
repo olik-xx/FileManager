@@ -45,8 +45,6 @@ namespace FileManager.Scheduler
             if (fileInfo == null) throw new ArgumentNullException(nameof(fileInfo));
 
             FileCache fileCache = new FileCache(fileInfo.Name);
-
-            //HashSet<string> set = new HashSet<string>(); //оптимален диапазон 100-10000 элементов).
             using (FileStream fs = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read))
             {
                 byte[] buffer = new byte[_options.Buffer];

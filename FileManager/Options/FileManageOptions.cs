@@ -32,7 +32,7 @@
         /// <summary>
         /// Представляет  интервал поиска пересечений между обработанными файлами, в минутах.
         /// </summary>
-        private int _interFileTimeoutIdle = 20;
+        private int _interFileTimeoutIdle = 5;
 
         /// <summary>
         /// Возвращает или задаёт интервал поиска пересечений между обработанными файлами, в минутах.
@@ -56,7 +56,7 @@
         /// <summary>
         /// Представляет количество одновременно обрабатываемых файлов.
         /// </summary>
-        private int _count;
+        private int _count = 5;
 
         /// <summary>
         /// Возвращает или задаёт количество одновременно обрабатываемых файлов.
@@ -83,7 +83,7 @@
         /// <summary>
         /// Представляет размер буфера чтения данных.
         /// </summary>
-        private int _buffer = 8;
+        private int _buffer = 2048;
 
         /// <summary>
         /// Представляет размер буфера чтения данных.
@@ -145,6 +145,12 @@
             {
                 _outdir = string.IsNullOrWhiteSpace(value) ? Path.Combine(AppContext.BaseDirectory, @"example\out") : value;
             }
+        }
+
+        /// <inheritdoc/>
+        public FileManageOptions Clone()
+        {
+            return (FileManageOptions)this.MemberwiseClone();
         }
 
     }

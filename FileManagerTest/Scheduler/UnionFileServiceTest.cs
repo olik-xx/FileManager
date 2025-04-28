@@ -1,9 +1,8 @@
 ﻿namespace FileManagerTest.Scheduler
 {
-    using FileManager.Cache;
     using System.Text;
+    using FileManager.Cache;
     using FileManager.Helpers;
-    using FileManager.Resources;
     using FileManager.Scheduler;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.Extensions.Configuration;
@@ -39,8 +38,10 @@
         [TestCase(@"Fakes")]
         public async Task Execute_Positive(string directory)
         {
+            Assert.That(ParamHelper.LastUnionDate, Is.Null);
             Assert.That(ParamHelper.UnionFileCache.Count, Is.EqualTo(0), $"Непустой кеш пересечений {nameof(UnionFileCache)}");
 
+            ParamHelper.FileManageOptions.Count = 15;
             ILogger<DistinctFileService> logger = Mock.Of<ILogger<DistinctFileService>>();
             var fileService = new DistinctFileService(ParamHelper.FileManageOptions, logger);
 
@@ -55,7 +56,9 @@
             for (int i = 0; i < rc.Length; i++)
                 Console.WriteLine(Encoding.UTF8.GetString(rc[i]));
 
-            
+            Assert.That(ParamHelper.LastUnionDate, Is.Not.Null, $"Неверное значение '{nameof(ParamHelper.LastUnionDate)}'");
+
+
         }
     }
 }

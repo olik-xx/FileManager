@@ -2,7 +2,6 @@
 {
     using System.Collections.Concurrent;
     using System.Text;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Кеш предварительной обработки файла.
@@ -129,7 +128,7 @@
         {
             lock (this._locker)
             {
-                string logFile = Path.Combine(logPath, $"Exclude_{Path.GetFileNameWithoutExtension(_fileName)}_{DateTime.Now:yyyy-MM-dd-HHmmss}.log"); //{Path.GetExtension(FileName)}
+                string logFile = Path.Combine(logPath, $"Exclude_{Path.GetFileNameWithoutExtension(_fileName)}_{DateTime.Now:yyyy-MM-dd-HHmmss}.log"); 
                 if (!Directory.Exists(logPath)) Directory.CreateDirectory(logPath);
 
                 if (_duplicateCache.Count == 0)

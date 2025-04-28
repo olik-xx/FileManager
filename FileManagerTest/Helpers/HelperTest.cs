@@ -4,6 +4,7 @@
     using FileManager.Helpers;
     using FileManager.Options;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.Extensions.Configuration;
     using Newtonsoft.Json;
 
     [TestFixture]
@@ -22,22 +23,32 @@
         [Test]
         public void Rebind_Positive()
         {
-            var options = new FileManageOptions();
-            options.Count += 10;
-            options.TimeoutIdle += 10;
-            options.Buffer = 4096;
-            options.Dir = Guid.NewGuid().ToString("N");
-            options.Outdir = Guid.NewGuid().ToString("N");
-
-            ParamHelper.FileManageOptions = options;
-            Console.WriteLine(JsonConvert.SerializeObject(options, Formatting.Indented));
-            Console.WriteLine();
-    
             var builder = WebApplication.CreateBuilder();
             ParamHelper.Configuration = builder.Configuration;
-            Helper.Rebind();
+            builder.Configuration.GetSection("FileManage").Bind(ParamHelper.FileManageOptions);
 
-            Console.WriteLine(JsonConvert.SerializeObject(options, Formatting.Indented));
+            FileManageOptions expected = ParamHelper.FileManageOptions.Clone();
+
+            ParamHelper.FileManageOptions.Count += 5;
+            ParamHelper.FileManageOptions.TimeoutIdle += 10;
+            ParamHelper.FileManageOptions.InterFileTimeoutIdle += 10;
+            ParamHelper.FileManageOptions.Buffer = 4096;
+            ParamHelper.FileManageOptions.Dir = Guid.NewGuid().ToString("N");
+            ParamHelper.FileManageOptions.Outdir = Guid.NewGuid().ToString("N");
+
+            Console.WriteLine(JsonConvert.SerializeObject(ParamHelper.FileManageOptions, Formatting.Indented));
+            Console.WriteLine();
+           
+            //
+            Helper.Rebind();
+            Console.WriteLine(JsonConvert.SerializeObject(ParamHelper.FileManageOptions, Formatting.Indented));
+
+            Assert.That(ParamHelper.FileManageOptions.Count, Is.EqualTo(expected.Count));
+            Assert.That(ParamHelper.FileManageOptions.TimeoutIdle, Is.EqualTo(expected.TimeoutIdle));
+            Assert.That(ParamHelper.FileManageOptions.InterFileTimeoutIdle, Is.EqualTo(expected.InterFileTimeoutIdle));
+            Assert.That(ParamHelper.FileManageOptions.Buffer, Is.EqualTo(expected.Buffer));
+            Assert.That(ParamHelper.FileManageOptions.Dir, Is.EqualTo(expected.Dir));
+            Assert.That(ParamHelper.FileManageOptions.Outdir, Is.EqualTo(expected.Outdir));
         }
 
        
